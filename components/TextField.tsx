@@ -2,7 +2,7 @@ import { useState } from "react";
 import { StyleSheet, TextInput } from "react-native";
 
 export function TextField() {
-  const [isFocused, setIsFocused] = useState(false);
+  const [isFocused, setIsFocused] = useState<Boolean>(false);
 
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
