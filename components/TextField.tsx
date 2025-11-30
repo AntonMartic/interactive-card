@@ -14,7 +14,6 @@ export function TextField() {
 
 const styles = StyleSheet.create({
   textField: {
-    margin: 20,
     height: 50,
     paddingVertical: 5,
     paddingHorizontal: 15,
