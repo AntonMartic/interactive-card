@@ -1,9 +1,11 @@
 import { cardBackgroundImages } from "@/utils/cardImages";
 import { useEffect, useState } from "react";
-import { Image, ImageBackground, ImageSourcePropType, StyleSheet, View } from "react-native";
+import { Image, ImageBackground, ImageSourcePropType, StyleSheet, Text, View } from "react-native";
 
 const chip = require("../assets/cards/chip.png");
+const cardType = require("../assets/cards/visa.png");
 const CHIP_ASPECT_RATIO = 101 / 82;
+const VISA_ASPECT_RATIO = 200 / 106;
 
 export function Card() {
   const [randomBackground, setRandomBackground] = useState<ImageSourcePropType | null>(null);
@@ -20,8 +22,22 @@ export function Card() {
   return (
     <ImageBackground source={randomBackground} resizeMode="cover" style={styles.card}>
       <View style={styles.darkerBackgorund}>
-        <View style={styles.cardTypeContainer}>
-          <Image source={chip} style={styles.chip}></Image>
+        <View style={styles.cardRows}>
+          <Image source={chip} style={styles.chip} />
+          <Image source={cardType} style={styles.cardType} />
+        </View>
+        <View style={styles.cardRows}>
+          <Text style={styles.cardNumberInput}>#### #### #### ####</Text>
+        </View>
+        <View style={styles.cardRows}>
+          <View>
+            <Text style={styles.cardLabels}>Card Holder</Text>
+            <Text style={styles.cardInfoInput}>JOHN DOE</Text>
+          </View>
+          <View>
+            <Text style={styles.cardLabels}>Expires</Text>
+            <Text style={styles.cardInfoInput}>MM/YY</Text>
+          </View>
         </View>
       </View>
     </ImageBackground>
@@ -52,8 +68,10 @@ const styles = StyleSheet.create({
   darkerBackgorund: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0, 0, 0, 0.4)",
+    display: "flex",
+    justifyContent: "space-between",
   },
-  cardTypeContainer: {
+  cardRows: {
     width: "100%",
     padding: 20,
     display: "flex",
@@ -61,8 +79,27 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   chip: {
-    width: 60,
-    height: "auto",
+    height: 40,
+    width: "auto",
     aspectRatio: CHIP_ASPECT_RATIO,
+  },
+  cardType: {
+    height: 40,
+    width: "auto",
+    aspectRatio: VISA_ASPECT_RATIO,
+  },
+  cardNumberInput: {
+    color: "white",
+    fontSize: 26,
+    letterSpacing: 4,
+  },
+  cardLabels: {
+    color: "lightgray",
+    fontSize: 12,
+    marginBottom: 5,
+  },
+  cardInfoInput: {
+    color: "white",
+    fontSize: 18,
   },
 });
