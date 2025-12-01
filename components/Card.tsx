@@ -1,21 +1,31 @@
+import { cardBackgroundImages } from "@/utils/cardImages";
 import { useEffect, useState } from "react";
-import { ImageBackground, ImageSourcePropType, StyleSheet, View } from "react-native";
+import { Image, ImageBackground, ImageSourcePropType, StyleSheet, View } from "react-native";
+
+const chip = require("../assets/cards/chip.png");
+const CHIP_ASPECT_RATIO = 101 / 82;
 
 export function Card() {
-  const [randomImage, setRandomImage] = useState<ImageSourcePropType | null>(null);
+  const [randomBackground, setRandomBackground] = useState<ImageSourcePropType | null>(null);
 
   useEffect(() => {
-    const randomCardNumber = Math.floor(Math.random() * 25) + 1;
-
-    const imageSource = require(`../assets/cards/${randomCardNumber}.jpg`);
-    setRandomImage(imageSource);
+    const randomCardNumber = Math.floor(Math.random() * cardBackgroundImages.length);
+    setRandomBackground(cardBackgroundImages[randomCardNumber]);
   }, []);
 
-  if (!randomImage) {
+  if (!randomBackground) {
     return <View style={styles.card} />;
   }
 
-  return <ImageBackground source={randomImage} resizeMode="cover" style={styles.card}></ImageBackground>;
+  return (
+    <ImageBackground source={randomBackground} resizeMode="cover" style={styles.card}>
+      <View style={styles.darkerBackgorund}>
+        <View style={styles.cardTypeContainer}>
+          <Image source={chip} style={styles.chip}></Image>
+        </View>
+      </View>
+    </ImageBackground>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -24,7 +34,6 @@ const styles = StyleSheet.create({
     width: 390,
     height: 245,
     marginBottom: -122.5,
-    backgroundColor: "lightgray",
     borderRadius: 15,
     display: "flex",
     justifyContent: "center",
@@ -39,5 +48,21 @@ const styles = StyleSheet.create({
     shadowRadius: 6.27,
     elevation: 10,
     overflow: "hidden",
+  },
+  darkerBackgorund: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
+  },
+  cardTypeContainer: {
+    width: "100%",
+    padding: 20,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  chip: {
+    width: 60,
+    height: "auto",
+    aspectRatio: CHIP_ASPECT_RATIO,
   },
 });
