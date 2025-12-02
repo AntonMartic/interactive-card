@@ -1,3 +1,5 @@
+import { DropDownData } from "../components/DropDown";
+
 export const cardBackgroundImages = [
   require('../assets/cards/1.jpeg'),
   require('../assets/cards/2.jpeg'),
@@ -25,3 +27,23 @@ export const cardBackgroundImages = [
   require('../assets/cards/24.jpeg'),
   require('../assets/cards/25.jpeg'),
 ];
+
+
+export function getMonths(): DropDownData[] {
+  const monthsData = Array.from({length: 12}, (_, i) => {
+    const month = (i + 1).toString().padStart(2, '0');
+    return {label: month, value: month};
+  });
+  const placeholder = {label: 'Month', value: null}
+  return [placeholder, ...monthsData];
+}
+
+export function getYears() {
+  const currentYear = new Date().getFullYear();
+  const yearsData = Array.from({length: 12}, (_, i) => {
+    const year = (currentYear + i).toString();
+    return {label: year, value: year};
+  })
+  const placeholder = {label: 'Year', value: null}
+  return [placeholder, ...yearsData];
+}

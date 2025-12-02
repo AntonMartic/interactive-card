@@ -1,10 +1,13 @@
+import { Picker } from "@react-native-picker/picker";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 
-import { Picker } from "@react-native-picker/picker";
-
-export function DropDown() {
-  const [isFocused, setIsFocused] = useState<Boolean>(false);
+export type DropDownData = {
+  label: string;
+  value: string | number | null;
+};
+export function DropDown({ data }: { data: DropDownData[] }) {
+  const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
@@ -13,8 +16,9 @@ export function DropDown() {
 
   return (
     <Picker style={dropDown} onFocus={handleFocus} onBlur={handleBlur} selectionColor="#3d9cff">
-      <Picker.Item label="test 1" />
-      <Picker.Item label="test 2" />
+      {data.map((item, index) => (
+        <Picker.Item key={item.label + index} label={item.label.toString()} value={item.value} />
+      ))}
     </Picker>
   );
 }
