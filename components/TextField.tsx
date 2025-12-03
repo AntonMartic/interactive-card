@@ -1,15 +1,43 @@
 import { useState } from "react";
 import { StyleSheet, TextInput } from "react-native";
 
-export function TextField() {
+export type TextFieldProps = {
+  onChangeText: (text: string) => void;
+  value: string;
+  onFocus?: () => void;
+  onBlur?: () => void;
+};
+
+export function TextField({
+  onChangeText,
+  value,
+  onFocus = () => {},
+  onBlur = () => {},
+}: TextFieldProps) {
   const [isFocused, setIsFocused] = useState<Boolean>(false);
 
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(false);
+  const handleFocus = () => {
+    setIsFocused(true);
+    onFocus();
+  };
+  const handleBlur = () => {
+    setIsFocused(false);
+    onBlur();
+  };
 
-  const textInputField = [styles.textField, isFocused && styles.textFieldFocused];
+  const textInputField = [
+    styles.textField,
+    isFocused && styles.textFieldFocused,
+  ];
 
-  return <TextInput style={textInputField} onFocus={handleFocus} onBlur={handleBlur} selectionColor="#3d9cff"></TextInput>;
+  return (
+    <TextInput
+      style={textInputField}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      value={value}
+      onChangeText={onChangeText}></TextInput>
+  );
 }
 
 const styles = StyleSheet.create({

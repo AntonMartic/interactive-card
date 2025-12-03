@@ -4,13 +4,22 @@ import { StyleSheet } from "react-native";
 
 export type DropDownData = {
   label: string;
-  value: string | null;
+  value: string;
 };
-export function DropDown({ data }: { data: DropDownData[] }) {
-  const [isFocused, setIsFocused] = useState<boolean>(false);
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
-  const isPlaceholderDisabled = selectedValue !== null;
+type DropDownProps = {
+  data: DropDownData[];
+  selectedValue: string;
+  onValueChange: (value: string) => void;
+};
+export function DropDown({
+  data,
+  selectedValue,
+  onValueChange,
+}: DropDownProps) {
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+
+  const isPlaceholderDisabled = selectedValue !== "";
 
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
@@ -18,11 +27,23 @@ export function DropDown({ data }: { data: DropDownData[] }) {
   const dropDown = [styles.container, isFocused && styles.containerFocused];
 
   return (
-    <Picker style={dropDown} onFocus={handleFocus} onBlur={handleBlur} selectionColor="#3d9cff" selectedValue={selectedValue} onValueChange={(itemValue) => setSelectedValue(itemValue)}>
+    <Picker
+      style={dropDown}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      selectedValue={selectedValue}
+      onValueChange={(itemValue) => onValueChange(itemValue)}>
       {data.map((item, index) => {
-        const isPlaceholder = item.value == null;
+        const isPlaceholder = item.value === "";
         const disabled = isPlaceholder && isPlaceholderDisabled;
-        return <Picker.Item key={item.label + index} label={item.label.toString()} value={item.value} enabled={!disabled} />;
+        return (
+          <Picker.Item
+            key={item.label + index}
+            label={item.label.toString()}
+            value={item.value}
+            enabled={!disabled}
+          />
+        );
       })}
     </Picker>
   );

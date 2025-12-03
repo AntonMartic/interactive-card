@@ -1,6 +1,13 @@
 import { cardBackgroundImages } from "@/utils/cardImages";
 import { useEffect, useState } from "react";
-import { Image, ImageBackground, ImageSourcePropType, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  ImageBackground,
+  ImageSourcePropType,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 const chip = require("../assets/cards/chip.png");
 const cardType = require("../assets/cards/visa.png");
@@ -8,10 +15,13 @@ const CHIP_ASPECT_RATIO = 101 / 82;
 const VISA_ASPECT_RATIO = 200 / 106;
 
 export function Card() {
-  const [randomBackground, setRandomBackground] = useState<ImageSourcePropType | null>(null);
+  const [randomBackground, setRandomBackground] =
+    useState<ImageSourcePropType | null>(null);
 
   useEffect(() => {
-    const randomCardNumber = Math.floor(Math.random() * cardBackgroundImages.length);
+    const randomCardNumber = Math.floor(
+      Math.random() * cardBackgroundImages.length
+    );
     setRandomBackground(cardBackgroundImages[randomCardNumber]);
   }, []);
 
@@ -20,7 +30,10 @@ export function Card() {
   }
 
   return (
-    <ImageBackground source={randomBackground} resizeMode="cover" style={styles.card}>
+    <ImageBackground
+      source={randomBackground}
+      resizeMode="cover"
+      style={styles.card}>
       <View style={styles.darkerBackgorund}>
         <View style={styles.cardRows}>
           <Image source={chip} style={styles.chip} />
