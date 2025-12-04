@@ -6,6 +6,7 @@ export type TextFieldProps = {
   value: string;
   onFocus?: () => void;
   onBlur?: () => void;
+  maxLength?: number;
 };
 
 export function TextField({
@@ -13,6 +14,7 @@ export function TextField({
   value,
   onFocus = () => {},
   onBlur = () => {},
+  maxLength,
 }: TextFieldProps) {
   const [isFocused, setIsFocused] = useState<Boolean>(false);
 
@@ -36,7 +38,8 @@ export function TextField({
       onFocus={handleFocus}
       onBlur={handleBlur}
       value={value}
-      onChangeText={onChangeText}></TextInput>
+      onChangeText={onChangeText}
+      maxLength={maxLength}></TextInput>
   );
 }
 

@@ -27,7 +27,7 @@ export default function Index() {
   return (
     <View style={styles.body}>
       <View style={styles.container}>
-        <Card /> {/** cardInfo={cardInfo} */}
+        <Card cardInfo={cardInfo} />
         <CardForms cardInfo={cardInfo} setCardInfo={setCardInfo} />
       </View>
     </View>

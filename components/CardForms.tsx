@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { CardInfo } from "@/app";
 import { Button } from "@/components/Button";
 import { TextField } from "@/components/TextField";
-import { getMonths, getYears } from "@/utils/cardImages";
+import { filterNonDigits, getMonths, getYears } from "@/utils/helpers";
 import { Dispatch, SetStateAction } from "react";
 import { DropDown } from "./DropDown";
 
@@ -38,7 +38,9 @@ export function CardForms({
         <View>
           <Text style={styles.inputLabel}>Card Holders</Text>
           <TextField
-            onChangeText={(text) => updateCardInfo("holder", text)}
+            onChangeText={(text) =>
+              updateCardInfo("holder", text.toUpperCase())
+            }
             value={cardInfo.holder}
           />
         </View>
@@ -61,10 +63,13 @@ export function CardForms({
           <View style={{ flex: 1 }}>
             <Text style={styles.inputLabel}>CVV</Text>
             <TextField
-              onChangeText={(text) => updateCardInfo("cvv", text)}
+              onChangeText={(text) =>
+                updateCardInfo("cvv", filterNonDigits(text))
+              }
               onFocus={() => updateCardInfo("cvvFocus", true)}
               onBlur={() => updateCardInfo("cvvFocus", false)}
               value={cardInfo.cvv}
+              maxLength={4}
             />
           </View>
         </View>

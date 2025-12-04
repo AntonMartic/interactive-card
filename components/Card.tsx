@@ -1,3 +1,4 @@
+import { CardInfo } from "@/app";
 import { cardBackgroundImages } from "@/utils/cardImages";
 import { useEffect, useState } from "react";
 import {
@@ -14,7 +15,7 @@ const cardType = require("../assets/cards/visa.png");
 const CHIP_ASPECT_RATIO = 101 / 82;
 const VISA_ASPECT_RATIO = 200 / 106;
 
-export function Card() {
+export function Card({ cardInfo }: { cardInfo: CardInfo }) {
   const [randomBackground, setRandomBackground] =
     useState<ImageSourcePropType | null>(null);
 
@@ -40,16 +41,22 @@ export function Card() {
           <Image source={cardType} style={styles.cardType} />
         </View>
         <View style={styles.cardRows}>
-          <Text style={styles.cardNumberInput}>#### #### #### ####</Text>
+          <Text style={styles.cardNumberInput}>
+            {cardInfo.cardNumber || "#### #### #### ####"}
+          </Text>
         </View>
         <View style={styles.cardRows}>
           <View>
             <Text style={styles.cardLabels}>Card Holder</Text>
-            <Text style={styles.cardInfoInput}>JOHN DOE</Text>
+            <Text style={styles.cardInfoInput}>
+              {cardInfo.holder || "FULL NAME"}
+            </Text>
           </View>
-          <View>
+          <View style={{ minWidth: 60 }}>
             <Text style={styles.cardLabels}>Expires</Text>
-            <Text style={styles.cardInfoInput}>MM/YY</Text>
+            <Text style={styles.cardInfoInput}>
+              {cardInfo.month || "MM"}/{cardInfo.year || "YY"}
+            </Text>
           </View>
         </View>
       </View>
