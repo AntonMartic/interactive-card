@@ -25,3 +25,27 @@ export const cardBackgroundImages = [
   require("../assets/cards/24.jpeg"),
   require("../assets/cards/25.jpeg"),
 ];
+
+export const cardIcons = {
+  amex: require("../assets/cards/amex.png"),
+  chip: require("../assets/cards/chip.png"),
+  dinersclub: require("../assets/cards/dinersclub.png"),
+  discover: require("../assets/cards/discover.png"),
+  jcb: require("../assets/cards/jcb.png"),
+  mastercard: require("../assets/cards/mastercard.png"),
+  troy: require("../assets/cards/troy.png"),
+  unionpay: require("../assets/cards/unionpay.png"),
+  visa: require("../assets/cards/visa.png"),
+};
+
+export const cardIconsAspect = {
+  amex: 250 / 86,
+  chip: 101 / 82,
+  dinersclub: 250 / 69,
+  discover: 2400 / 504,
+  jcb: 886 / 325,
+  mastercard: 250 / 195,
+  troy: 250 / 111,
+  unionpay: 320 / 200,
+  visa: 200 / 106,
+};

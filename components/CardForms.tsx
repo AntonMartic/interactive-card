@@ -3,7 +3,14 @@ import { StyleSheet, Text, View } from "react-native";
 import { CardInfo } from "@/app";
 import { Button } from "@/components/Button";
 import { TextField } from "@/components/TextField";
-import { filterNonDigits, getMonths, getYears } from "@/utils/helpers";
+import {
+  CardIssuers,
+  filterNonDigits,
+  formatTextInput,
+  getCardIssuer,
+  getMonths,
+  getYears,
+} from "@/utils/utils";
 import { Dispatch, SetStateAction } from "react";
 import { DropDown } from "./DropDown";
 
@@ -25,14 +32,18 @@ export function CardForms({
       [field]: value,
     }));
   };
+  const CardIssuer: CardIssuers = getCardIssuer(cardInfo.cardNumber);
   return (
     <View style={styles.outerContainer}>
       <View style={styles.inputContainer}>
         <View>
           <Text style={styles.inputLabel}>Card Number</Text>
           <TextField
-            onChangeText={(text) => updateCardInfo("cardNumber", text)}
+            onChangeText={(text) =>
+              updateCardInfo("cardNumber", formatTextInput(text))
+            }
             value={cardInfo.cardNumber}
+            maxLength={19}
           />
         </View>
         <View>
@@ -42,6 +53,7 @@ export function CardForms({
               updateCardInfo("holder", text.toUpperCase())
             }
             value={cardInfo.holder}
+            maxLength={26} // TODO: length function
           />
         </View>
         <View style={styles.lastInput}>
@@ -69,7 +81,7 @@ export function CardForms({
               onFocus={() => updateCardInfo("cvvFocus", true)}
               onBlur={() => updateCardInfo("cvvFocus", false)}
               value={cardInfo.cvv}
-              maxLength={4}
+              maxLength={CardIssuer === "amex" ? 4 : 3}
             />
           </View>
         </View>
