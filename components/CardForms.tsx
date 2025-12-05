@@ -32,7 +32,18 @@ export function CardForms({
       [field]: value,
     }));
   };
+
   const CardIssuer: CardIssuers = getCardIssuer(cardInfo.cardNumber);
+
+  let maxCardNumberLenght = 19;
+  let maxCVVLength = 3;
+  if (CardIssuer === "amex") {
+    maxCardNumberLenght = 17;
+    maxCVVLength = 4;
+  } else if (CardIssuer === "dinersclub") {
+    maxCardNumberLenght = 16;
+  }
+
   return (
     <View style={styles.outerContainer}>
       <View style={styles.inputContainer}>
@@ -43,7 +54,7 @@ export function CardForms({
               updateCardInfo("cardNumber", formatTextInput(text))
             }
             value={cardInfo.cardNumber}
-            maxLength={19}
+            maxLength={maxCardNumberLenght}
           />
         </View>
         <View>
@@ -81,7 +92,7 @@ export function CardForms({
               onFocus={() => updateCardInfo("cvvFocus", true)}
               onBlur={() => updateCardInfo("cvvFocus", false)}
               value={cardInfo.cvv}
-              maxLength={CardIssuer === "amex" ? 4 : 3}
+              maxLength={maxCVVLength}
             />
           </View>
         </View>

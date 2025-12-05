@@ -42,15 +42,15 @@ export function getCardIssuer(cardNumber: string): CardIssuers {
   // dinersclub starts w/ 30, 36, 38, 39
   if (rawString.match(/^3(?:0|6|8|9)/)) return "dinersclub";
 
-  // discover statrs w/ 6011, 644-649, 65
-  if (rawString.match(/^(6011|[64[4-9]|65)/)) return "discover";
-
   // jcb statrs w/ 3528–3589
   if (rawString.match(/^35(?:2[89]|[3-8][0-9])/)) return "jcb";
 
   // mastercard statrs w/ 2221–2720, 51–55
   if (rawString.match(/^(222[1-9]|2[3-6][0-9]{2}|27[0-1][0-9]|2720|5[1-5])/))
     return "mastercard";
+
+  // discover statrs w/ 6011, 644-649, 65
+  if (rawString.match(/^(6011|65|64[4-9])/)) return "discover";
 
   // troy statrs w/ 9792
   if (rawString.match(/^9792/)) return "troy";
@@ -64,42 +64,64 @@ export function getCardIssuer(cardNumber: string): CardIssuers {
   return "visa"; // Fallback to visa
 }
 
-export function formatTextInput(cardNumber: string): string {
-  const rawString = filterNonDigits(cardNumber);
-  const cardIssuer = getCardIssuer(rawString);
-
-  let numberFormat: number[] = [4, 4, 4, 4];
-
-  if (cardIssuer === "amex") {
-    numberFormat = [4, 6, 5];
-  } else if (cardIssuer === "dinersclub") {
-    numberFormat = [4, 6, 4];
+function getCardPattern(issuer: CardIssuers): number[] {
+  if (issuer === "amex") {
+    return [4, 6, 5]; // 17 l
   }
+  if (issuer === "dinersclub") {
+    return [4, 6, 4]; // 16 l
+  }
+  return [4, 4, 4, 4];
+}
 
+function _applyFormattingPattern(
+  inputString: string,
+  pattern: number[],
+  maxTotalLength: number
+): string {
   let formattedString = "";
   let digitIndex = 0;
 
-  for (const chunkLength of numberFormat) {
+  for (let i = 0; i < pattern.length; i++) {
+    const chunkLength = pattern[i];
     const start = digitIndex;
-    const end = digitIndex + chunkLength;
-    const chunk = rawString.substring(start, end);
+    const end = start + chunkLength;
+    const chunk = inputString.substring(start, end);
 
     if (chunk.length > 0) {
       formattedString += chunk;
       digitIndex += chunk.length;
     }
 
-    const isFullChunk = chunk.length === chunkLength;
-    const hasMoreDigits = digitIndex < rawString.length;
+    const isLastChunk = i === pattern.length - 1;
 
-    if (isFullChunk && hasMoreDigits) {
+    if (!isLastChunk && digitIndex < maxTotalLength) {
       formattedString += " ";
     }
 
-    if (digitIndex >= rawString.length) {
+    if (digitIndex >= inputString.length || digitIndex >= maxTotalLength) {
       break;
     }
   }
 
   return formattedString.trim();
+}
+
+export function formatTextInput(cardNumber: string): string {
+  const rawString = filterNonDigits(cardNumber);
+  const issuer = getCardIssuer(rawString);
+  const pattern = getCardPattern(issuer);
+  const maxDigits = pattern.reduce((sum, length) => sum + length, 0);
+
+  return _applyFormattingPattern(rawString, pattern, maxDigits);
+}
+
+export function formatCardDisplay(cardNumber: string): string {
+  const rawDigits = filterNonDigits(cardNumber);
+  const issuer = getCardIssuer(rawDigits);
+  const pattern = getCardPattern(issuer);
+  const maxDigits = pattern.reduce((sum, length) => sum + length, 0);
+  const maskedDigits = rawDigits.padEnd(maxDigits, "#").substring(0, maxDigits);
+
+  return _applyFormattingPattern(maskedDigits, pattern, maxDigits);
 }

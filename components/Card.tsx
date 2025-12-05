@@ -1,5 +1,10 @@
 import { CardInfo } from "@/app";
-import { cardBackgroundImages } from "@/utils/cardImages";
+import {
+  cardBackgroundImages,
+  cardIcons,
+  cardIconsAspect,
+} from "@/utils/cardImages";
+import { formatCardDisplay, getCardIssuer } from "@/utils/utils";
 import { useEffect, useState } from "react";
 import {
   Image,
@@ -9,11 +14,6 @@ import {
   Text,
   View,
 } from "react-native";
-
-const chip = require("../assets/cards/chip.png");
-const cardType = require("../assets/cards/visa.png");
-const CHIP_ASPECT_RATIO = 101 / 82;
-const VISA_ASPECT_RATIO = 200 / 106;
 
 export function Card({ cardInfo }: { cardInfo: CardInfo }) {
   const [randomBackground, setRandomBackground] =
@@ -26,6 +26,10 @@ export function Card({ cardInfo }: { cardInfo: CardInfo }) {
     setRandomBackground(cardBackgroundImages[randomCardNumber]);
   }, []);
 
+  const Issuer = getCardIssuer(cardInfo.cardNumber);
+  const IssuerIcon = cardIcons[Issuer];
+  const IssuerAspect = cardIconsAspect[Issuer];
+
   if (!randomBackground) {
     return <View style={styles.card} />;
   }
@@ -37,12 +41,29 @@ export function Card({ cardInfo }: { cardInfo: CardInfo }) {
       style={styles.card}>
       <View style={styles.darkerBackgorund}>
         <View style={styles.cardRows}>
-          <Image source={chip} style={styles.chip} />
-          <Image source={cardType} style={styles.cardType} />
+          <Image
+            source={cardIcons.chip}
+            style={{
+              height: 40,
+              width: "auto",
+              aspectRatio: cardIconsAspect.chip,
+            }}
+          />
+          <Image
+            source={IssuerIcon}
+            style={{
+              height: 40,
+              width: "auto",
+              maxWidth: 100,
+              aspectRatio: IssuerAspect,
+              resizeMode: "contain",
+            }}
+          />
         </View>
         <View style={styles.cardRows}>
           <Text style={styles.cardNumberInput}>
-            {cardInfo.cardNumber || "#### #### #### ####"}
+            {formatCardDisplay(cardInfo.cardNumber)}
+            {/*cardInfo.cardNumber || "#### #### #### ####"*/}
           </Text>
         </View>
         <View style={styles.cardRows}>
@@ -97,16 +118,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-  chip: {
-    height: 40,
-    width: "auto",
-    aspectRatio: CHIP_ASPECT_RATIO,
-  },
-  cardType: {
-    height: 40,
-    width: "auto",
-    aspectRatio: VISA_ASPECT_RATIO,
   },
   cardNumberInput: {
     color: "white",
