@@ -64,7 +64,7 @@ export function CardForms({
               updateCardInfo("holder", text.toUpperCase())
             }
             value={cardInfo.holder}
-            maxLength={26} // TODO: length function
+            maxLength={26}
           />
         </View>
         <View style={styles.lastInput}>
